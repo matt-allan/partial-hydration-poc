@@ -1,25 +1,8 @@
 import { h, render } from 'preact';
 
-let hydrationCounter = 0;
-
-let data = {};
-
 export const dehydrate = (Component, props) => {
-  let id = ++hydrationCounter;
-
-  data[id] = props;
-
-  return id;
+  return JSON.stringify(props);
 };
-
-export const flush = () => {
-  const serializedData = JSON.stringify(data);
-
-  hydrationCounter = 0;
-  data = {}; 
-
-  return serializedData;
-}
 
 const markers = () => Array.from(
   document.querySelectorAll('script[type=\'application/hydration-marker\']')
@@ -27,9 +10,19 @@ const markers = () => Array.from(
 
 export const hydrate = (components) => {
   for (const marker of markers()) {
-    // get the component and props
 
-    // render it
+    const name = marker.getAttribute('data-name');
+    // todo: make this work w/ fragments
+    const el = marker.nextElementSibling;
+    const parent = el.parentElement;
+    const props = JSON.parse(marker.innerHTML)
+
+    const Component = components.find(
+      (el) => el.displayName === name || el.name === name
+    );
+
+    console.log(name, parent, el, props, Component);
+
     render(
       h(Component, props),
       parent,

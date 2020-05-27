@@ -1,14 +1,17 @@
 import render from 'preact-render-to-string';
 import { h } from 'preact';
-import { createServer } from 'http';
+import express from 'express';
 
 import { App } from './components/App.js';
 
-const server = createServer((req, res) => {
-  const html = render(h(App), { pretty: true });
+const port = 1337;
 
-  res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.end(`<!DOCTYPE html><html lang="en"><meta charset="UTF-8"><body>${html}</body></html>`);
-});
+express()
+  .get('/', (req, res) => {
+    const html = render(h(App), { pretty: true });
 
-server.listen(1337, '127.0.0.1', () => console.log('Listening on 1337...'));
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(`<!DOCTYPE html><html lang="en"><meta charset="UTF-8"><body>${html}</body></html>`);
+  })
+  .use(express.static('public'))
+  .listen(port, () => console.log(`Listening at http://localhost:${port}`))

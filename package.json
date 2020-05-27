@@ -1,11 +1,16 @@
 {
   "dependencies": {
+    "express": "^4.17.1",
     "preact": "^10.4.4",
     "preact-render-to-string": "^5.1.8"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^8.0.0",
+    "rollup": "^2.11.0"
+  },
   "type": "module",
   "scripts": {
+    "build": "rollup --config",
     "serve": "node src/server.js"
   }
 }
